@@ -1,0 +1,402 @@
+<!DOCTYPE HTML>
+<html style="font-family:Sans-Serif"> <!--Fix this-->
+   <head>
+      <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+      <title>Legend of Brauner</title>
+      <script type="text/javascript">
+         // Global Variables
+         var currentLocale = "";
+		 var currentLocations = new Array();
+		 var score = 0;
+		 var setScore = false;
+		 var findLocation = new Array(5,5,5,5,5,5,5,5,5);
+		 var playerInventory = new Array(0,0,0,0,0,0,0,0,0);
+		 var haveItems = new Array(0,0,0,0,0,0,0,0,0);
+		 var theSword = new Array(0, "Sword", "A powerful Blade");
+		 var theLantern = new Array(1, "Lantern", "A small light in a box");
+		 var theBoomerang = new Array(2, "Boomerang", "A horseshoe shaped object that can be thrown");
+		 var theSickle = new Array(3, "Sickle", "An instrument used for cutting grass");
+		 var theFlour = new Array(4, "Flour", "A small pouch of flour used for cooking");
+		 var thePotion = new Array(5, "Potion", "A concoction made from fresh herbs used for medicinal healing.");
+		 var theMoney = new Array(6, "Bag of Gold", "A small pouch containing a couple coins, used among the country as a currency");
+		 var theFishingRod = new Array(7, "Fishing Rod", "A wooden rod used for catching anything in the sea varying from boots to sunken treasure");
+		 var theFlint = new Array(8, "Flint and Tinder", "A small box used for lighting fires. Don't burn yourself!");
+		 //location 
+		 var locations = new Array();
+		 locations[0] = new Array();
+		 locations[1] = new Array();
+		 locations[2] = new Array();
+		 locations[3] = new Array();
+		 locations[4] = new Array();
+		 locations[5] = new Array();
+		 locations[6] = new Array();
+		 locations[7] = new Array();
+		 locations[8] = new Array();
+		 //Creating multiple rows in the array
+		 currentLocations[0] = new Array();
+		 currentLocations[1] = new Array();
+		 currentLocations[2] = new Array();
+		 //Locations
+		 currentLocations[0][0] = 0;
+		 currentLocations[0][1] = 1;
+		 currentLocations[0][2] = 2;
+		 currentLocations[1][0] = 3;
+		 currentLocations[1][1] = 4;
+		 currentLocations[1][2] = 5;
+		 currentLocations[2][0] = 6;
+		 currentLocations[2][1] = 7;
+		 currentLocations[2][2] = 8;
+		 
+         function updateDisplay() {
+            var msg = "";
+			var item = "";
+            switch (currentLocale) {
+               case currentLocations[0][0]:  
+											 locations[0][0] = 0;
+											 locations[0][1] = "Town Square";
+											 locations[0][2] = "Surrounded by buildings bustling with people everywhere.";
+											 msg = locations[0][2];
+											 items = theSword[2];
+                               break;
+			   case currentLocations[0][1]: 
+			                                 locations[1][0] = 1;
+											 locations[1][1] = "Felkor Forest";
+											 locations[1][2] = "A deep dense Forest.";
+											 msg = locations[1][2];
+											 items = theLantern[2];
+							   break;
+			   case currentLocations[0][2]: 
+											 locations[2][0] = 2;
+											 locations[2][1] = "Dungeon";
+											 locations[2][2] = "A dungeon with a dark enterance.";
+											 locations[2][4] = 5;
+											 msg = locations[2][2];
+											 items = theBoomerang[2];
+							   break;
+               case currentLocations[1][0]:  
+											 locations[3][0] = 3;
+											 locations[3][1] = "Farm";
+											 locations[3][2] = "A plain of wheat with a scarecrow over on the side.";
+											 locations[3][4] = 5;
+											 msg = locations[3][2];
+											 items = theSickle[2];
+                               break;
+			   case currentLocations[1][1]:  
+			   								 locations[4][0] = 4;
+											 locations[4][1] = "Plains";
+											 locations[4][2] = "Hills of tall grass that seem to go on forever.";
+											 locations[4][4] = 5;
+											 msg = locations[4][2];
+											 items = theFlour[2];
+                               break;
+			   case currentLocations[1][2]:  
+											 locations[5][0] = 5;
+											 locations[5][1] = "Pond";
+											 locations[5][2] = "A small pond surrounded by small groups of flies and frogs.";
+											 locations[5][4] = 5;
+											 msg = locations[5][2];
+											 items = thePotion[2];
+                               break;
+               case currentLocations[2][0]: 
+			   								 locations[6][0] = 6;
+											 locations[6][1] = "Market";
+											 locations[6][2] = "Market stands surround you endlessly with crowds of people flocking around a single stand.";
+											 locations[6][4] = 5;
+											 msg = locations[6][2];
+											 items = theMoney[2];
+                               break;
+			   case currentLocations[2][1]: 
+			   			   					 locations[7][0] = 7;
+											 locations[7][1] = "Port";
+											 locations[7][2] = "Flocks of scallywags and sailors surround you with a distinct smell of fish in the air.";
+											 locations[7][4] = 5;
+											 msg = locations[7][2];
+											 items = theFishingRod[2];
+                               break;
+			   case currentLocations[2][2]: 
+											 locations[8][0] = 8;
+											 locations[8][1] = "River";
+											 locations[8][2] = "A flowing river stands in front of you with a little bridge further downshore.";
+											 locations[8][4] = 5;
+											 msg = locations[8][2];
+											 items = theFlint[2];		
+                               break;
+               default      : msg = "currentLocale matches no cases";
+            }
+			var taPtr = document.getElementById("taDisplay");
+            var history = taPtr.value;
+            taPtr.value = msg + "\n" + "You've found " + items + "\n" +  "You're score is " + score + "\n\n" + history;
+         }
+         
+         function go(dir) {
+            var before = currentLocale;
+			var taPtr = document.getElementById("taDisplay");
+			var history = taPtr.value;
+            switch(dir) {				
+               case('north'):
+                  if (currentLocale === 0) {
+                     currentLocale = 3;
+					 score += findLocation[3];
+					 findLocation[3] = 0;
+				  } else if (currentLocale === 1) {
+					currentLocale = 4;
+					 score += findLocation[4];
+					 findLocation[4] = 0;
+				  } else if (currentLocale === 2) {
+					currentLocale = 5;
+					 score += findLocation[5];
+					 findLocation[5] = 0;
+				  } else if (currentLocale === 3) {
+                     currentLocale = 6;
+					 score += findLocation[6];
+					 findLocation[6] = 0;
+				  } else if (currentLocale === 4) {
+					currentLocale = 7;
+					 score += findLocation[7];
+					 findLocation[7] = 0;
+				  } else if (currentLocale === 5) {
+					currentLocale = 8;
+					 score += findLocation[8];
+					 findLocation[8] = 0;
+				  } else {
+					 taPtr.value = "You can't go that way!\n" + history;
+                  }
+                  break;
+               case('south'):
+                  if (currentLocale === 8) {
+                     currentLocale = 5;
+					 score += findLocation[5];
+					 findLocation[5] = 0;
+				  } else if (currentLocale === 7) {
+					 currentLocale = 4;
+					 score += findLocation[4];
+					 findLocation[4] = 0;
+				  } else if (currentLocale === 6) {
+					 currentLocale = 3;
+					 score += findLocation[3];
+					 findLocation[3] = 0;
+				  } else if (currentLocale === 5) {
+                     currentLocale = 2;
+					 score += findLocation[2];
+					 findLocation[2] = 0;
+				  } else if (currentLocale === 4) {
+					 currentLocale = 1;
+					 score += findLocation[1];
+					 findLocation[1] = 0;
+				  } else if (currentLocale === 3) {
+					 currentLocale = 0;
+					 score += findLocation[0];
+					 findLocation[0] = 0;
+				  } else {
+					 taPtr.value = "You can't go that way!\n" + history;
+                  }
+                  break;
+               case('east'):
+			       if (currentLocale === 0) {
+                     currentLocale = 1;
+					 score += findLocation[1];
+					 findLocation[1] = 0;
+				  } else if (currentLocale === 1) {
+					 currentLocale = 2;
+					 score += findLocation[2];
+					 findLocation[2] = 0;
+				  } else if (currentLocale === 3) {
+					 currentLocale = 4;
+					 score += findLocation[4];
+					 findLocation[4] = 0;
+				  } else if (currentLocale === 4) {
+                     currentLocale = 5;
+					 score += findLocation[5];
+					 findLocation[5] = 0;
+				  } else if (currentLocale === 6) {
+					 currentLocale = 7;
+					 score += findLocation[7];
+					 findLocation[7] = 0;
+				  } else if (currentLocale === 7) {
+					 currentLocale = 8;
+					 score += findLocation[8];
+					 findLocation[8] = 0;
+				  } else {
+					 taPtr.value = "You can't go that way!\n" + history;
+                  }
+                  break;
+               case('west'):
+				  if (currentLocale === 1) {
+                     currentLocale = 0;
+					 score += findLocation[0];
+					 findLocation[0] = 0;
+				  } else if (currentLocale === 2) {
+					 currentLocale = 1;
+					 score += findLocation[1];
+					 findLocation[1] = 0;
+				  } else if (currentLocale === 4) {
+					 currentLocale = 3;
+					 score += findLocation[3];
+					 findLocation[3] = 0;
+				  } else if (currentLocale === 5) {
+                     currentLocale = 4;
+					 score += findLocation[4];
+					 findLocation[4] = 0;
+				  } else if (currentLocale === 7) {
+					 currentLocale = 6;
+					 score += findLocation[6];
+					 findLocation[6] = 0;
+				  } else if (currentLocale === 8) {
+					 currentLocale = 7;
+					 score += findLocation[7];
+					 findLocation[7] = 0;
+				  } else {
+					 taPtr.value = "You can't go that way!\n" + history;
+                  }
+                  break;
+				case('dance'):
+					var danceAmount = 0;
+					var taPtr = document.getElementById("taDisplay");
+					var history = taPtr.value;
+					taPtr.value =  "\nYou break out into dance\n" + history;
+				break;
+               default: alert("Internal Error: unknown direction: " + dir + ".");
+            }
+            if (currentLocale != before) {
+               updateDisplay();
+            }
+         }
+		 /*Items
+		 var playerInventory = new Array();
+		 var theSword = new Array(0, "Sword", "A powerful Blade");
+		 var theLantern = new Array(1, "Lantern", "A small light in a box");
+		 var theBoomerang = new Array(2, "Boomerang", "A horseshoe shaped object that can be thrown");
+		 var theSickle = new Array(3, "Sickle", "An instrument used for cutting grass");
+		 var theFlour = new Array(4, "Flour", "A small pouch of flour used for cooking");
+		 var thePotion = new Array(5, "Potion", "A concoction made from fresh herbs used for medicinal healing.");
+		 var theMoney = new Array(6, "Bag of Gold", "A small pouch containing a couple coins, used among the country as a currency");
+		 var theFishingRod = new Array(7, "Fishing Rod", "A wooden rod used for catching anything in the sea varying from boots to sunken treasure");
+		 var theFlint = new Array(8, "Flint and Tinder", "A small box used for lighting fires. Don't burn yourself!");
+		  */
+		 function take(){
+			var itemPtr = document.getElementById("itemDisplay");
+			var history = itemPtr.value;
+			if(currentLocale === locations[0][0]){
+				playerInventory[0] = 1;
+			} else if (currentLocale === locations[1][0]){
+				playerInventory[1] = 1;
+			} else if (currentLocale === locations[2][0]){
+				playerInventory[2] = 1;
+			} else if (currentLocale === locations[3][0]){
+				playerInventory[3] = 1;
+			} else if (currentLocale === locations[4][0]){
+				playerInventory[4] = 1;
+			} else if (currentLocale === locations[5][0]){
+				playerInventory[5] = 1;
+			} else if (currentLocale === locations[6][0]){
+				playerInventory[6] = 1;
+			} else if (currentLocale === locations[7][0]){
+				playerInventory[7] = 1;
+			} else if (currentLocale === locations[8][0]){
+				playerInventory[8] = 1;
+			} else {
+				itemPtr.value = history + "\nThere is no item here!";
+			}
+			if(haveItems[0] === 0) {
+				if(playerInventory[0] === 1){
+					itemPtr.value = history + "\n" + theSword[1];
+					haveItems[0] = 1;
+				}
+			}
+			if(haveItems[1] === 0) {
+				if(playerInventory[1] === 1){
+					itemPtr.value = history + "\n" + theLantern[1];
+					haveItems[1] = 1;
+				}
+			}
+			if(haveItems[2] === 0) {
+				if(playerInventory[2] === 1){
+					itemPtr.value = history + "\n" + theBoomerang[1];
+					haveItems[2] = 1;
+				}
+			}
+			if(haveItems[3] === 0) {
+				if(playerInventory[3] === 1){
+					itemPtr.value = history + "\n" + theSickle[1];
+					haveItems[3] = 1;
+				}
+			}
+			if(haveItems[4] === 0) {
+				if(playerInventory[4] === 1){
+					itemPtr.value = history + "\n" + theFlour[1];
+					haveItems[4] = 1;
+				}
+			}
+			if(haveItems[5] === 0) {
+				if(playerInventory[5] === 1){
+					itemPtr.value = history + "\n" + thePotion[1];
+					haveItems[5] = 1;
+				}
+			}
+			if(haveItems[6] === 0) {
+				if(playerInventory[6] === 1){
+					itemPtr.value = history + "\n" + theMoney[1];
+					haveItems[6] = 1;
+				}
+			}
+			if(haveItems[7] === 0) {
+				if(playerInventory[7] === 1){
+					itemPtr.value = history + "\n" + theFishingRod[1];
+					haveItems[7] = 1;
+				}
+			}
+			if(haveItems[8] === 0) {
+				if(playerInventory[8] === 1){
+					itemPtr.value = history + "\n" + theFlint[1];
+					haveItems[8] = 1;
+				}
+			}
+		 }
+		 
+		 function init(){
+			currentLocale = currentLocations[0][0];
+			updateDisplay();
+		 }
+      </script>
+   </head>
+   <body onload="init();">
+      <h2>Legend of Brauner</h2>
+      <textarea id="taDisplay" style="width:400px; height:200px;">
+	  Welcome to Legend of Brauner, your journey begins in a crowded square with people surrounding you from all over.
+      </textarea>
+	  <textarea id="itemDisplay" style ="width:250px; height:200px";>
+	  Inventory
+	  ---------
+	  </textarea>
+      <br>
+      <input type="button"
+             value = "North"
+             onclick="go('north');">
+      <input type="button"
+             value = "South"
+             onclick="go('south');">
+      <input type="button"
+             value = "East"
+             onclick="go('east');">
+      <input type="button"
+             value = "West"
+             onclick="go('west');">
+	  <input type="button"
+			 value = "Dance"
+			 onclick="go('dance');">
+	  <input type="button"
+			 value = "Take Item"
+			 onclick="take();">
+	  <!--Working on it, can't figure it out 
+	  <br>
+	  <input id="dirControl" type="text" name="direction">
+	  <br>
+	  <input type="button"
+			 value="Go"
+			 onclick="">
+	  </form>
+	  -->
+	  <br>
+	  <img src="map.png" width="350px" height="300px">
+   </body>
+</html>
